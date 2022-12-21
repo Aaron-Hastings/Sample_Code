@@ -8,6 +8,10 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
+// The following youtube links provide good tutorials
+// https://www.youtube.com/@BroCodez = very succinct videos that cover a wide range of c# programming
+// https://www.youtube.com/@Dani_Krossing = not as many examples, but longer videos
+
 namespace Sample_Code
 {
     internal class Program
@@ -317,28 +321,33 @@ namespace Sample_Code
             double y;
             double result;
 
-            try
+            bool invalidInput = true;
+            while( invalidInput )
             {
-                Console.Write("Enter Number 1: ");
-                x = Convert.ToInt32(Console.ReadLine());
+                invalidInput = false;
+                try
+                {
+                    Console.Write("Enter Number 1: ");
+                    x = Convert.ToInt32(Console.ReadLine());
 
-                Console.Write("Enter Number 2: ");
-                y = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Enter Number 2: ");
+                    y = Convert.ToInt32(Console.ReadLine());
 
-                result = x / y;
+                    result = x / y;
 
-                Console.WriteLine("result: " + result);
+                    Console.WriteLine("result: " + result);
+                }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine("Entries must be numbers.");
+                    invalidInput = true;
+                }
+                catch (DivideByZeroException ex)
+                {
+                    Console.WriteLine("Denominator cannot be 0");
+                    invalidInput = true;
+                }
             }
-            catch (FormatException ex)
-            {
-                Console.WriteLine("Entries must be numbers.");
-
-            }
-            catch (DivideByZeroException ex)
-            {
-                Console.WriteLine("Denominator cannot be 0");
-            }
-
 
             // Conditional Operator
             //------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -371,24 +380,10 @@ namespace Sample_Code
             Console.WriteLine();
 
 
-            // This makes calls to code outside Main
+            // This bit makes calls to code outside Main
             //------------------------------------------------------------------------------------------------------------------------------------------------------
+            CallSomeStuffMethod();
 
-            // Call simple method and overloaded versions
-            SimpleMethod();
-            SimpleMethod("Fred");
-            bool ofAge = SimpleMethod("Fred", 19);
-            Console.WriteLine("You can drink: " + ofAge);
-            Console.WriteLine();
-
-            // Call method that uses params keyword
-            double total = AddNumbers(2.3, 4.5, 3.7);
-            Console.WriteLine($"Total is {total}");
-            Console.WriteLine();
-
-            // Create a car object
-            Car myCar = new Car("Ford", "F150", 2017, "Grey", 55);
-            myCar.PrintVehicleDetails();
 
             // Closing Out Console
             //------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -396,8 +391,14 @@ namespace Sample_Code
             Console.WriteLine("Press any key to close window.");
             Console.ReadKey(); // Wait for user before ending program
 
+
         }
 
+        //------------------------------------------------------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------------------------------------------------------------------
+        // Outside Main function, but inside class definition
+        //------------------------------------------------------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------------------------------------------------------------------
 
         // Methods
         //------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -422,6 +423,42 @@ namespace Sample_Code
         // members are always public, and no access modifiers can be applied. Delegates behave like classes and structs.By default, they have internal access when
         // declared directly within a namespace, and private access when nested.
         // REF: https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/access-modifiers
+        static void CallSomeStuffMethod()
+        {
+            // Call simple method and overloaded versions
+            SimpleMethod();
+            SimpleMethod("Fred");
+            bool ofAge = SimpleMethod("Fred", 19);
+            Console.WriteLine("You can drink: " + ofAge);
+            Console.WriteLine();
+
+            // Call method that uses params keyword
+            double total = AddNumbers(2.3, 4.5, 3.7);
+            Console.WriteLine($"Total is {total}");
+            Console.WriteLine();
+
+            // Create a human object
+            Human human1 = new Human();
+            human1.Name = "Rick";
+            human1.age = 65;
+            human1.Eat();
+            human1.Sleep();
+
+            // Create some car objects
+            Console.WriteLine("The number of cars before creating any cars");
+            Car.PrintNumerofCars();
+            Car car1 = new Car("Ford", "F150", 2017, "Grey", 55);
+            car1.PrintVehicleDetails();
+            Car car2 = new Car("Ford", "F150", 2017, "Grey", 55);
+            car2.PrintVehicleDetails();
+            Car car3 = new Car(); // Uses overloaded constructor
+            car3.PrintVehicleDetails();
+            Console.WriteLine($"Number of Cars: {Car.numberOfCars}");
+            Console.WriteLine("The number of cars after creating some cars");
+            // Alternate (static method option)
+            Car.PrintNumerofCars();
+        }
+
         static void SimpleMethod()
         {
             // This method is accessed through the class (not an object of the class), does not return anything and takes no input parameters. By default it is "internal"
@@ -486,17 +523,32 @@ namespace Sample_Code
         }
 
 
-        // Classes
+        // Classes and Objects
         //------------------------------------------------------------------------------------------------------------------------------------------------------
+        class Human
+        {
+            // Very simple class (and not secure)
+            public string? Name; // not secure, but good for example
+            public int age; // not secure, but good for example
+
+            public void Eat()  // not secure, but good for example
+            {
+                Console.WriteLine(Name + " is eating");
+            }
+            public void Sleep()  // not secure, but good for example
+            {
+                Console.WriteLine(Name + " is sleeping");
+            }
+        }
         class Car
         {
-
             // Fields - what an object has
             string make;
             string model;
             int year;
             string color;
             private int speed; // This one will only be accessible by the getter / setter
+            public static int numberOfCars = 0; // Belongs to class not an instance
 
             // Constructor
             public Car(string make, string model, int year, string color, int userSpeed)
@@ -506,6 +558,17 @@ namespace Sample_Code
                 this.year = year;
                 this.color = color;
                 Speed = userSpeed; // Becomes value in the setter
+                numberOfCars++;
+            }
+            // Overlaoded Constructor
+            public Car() // Default Case
+            {
+                this.make = "ACME";
+                this.model = "SEDAN";
+                this.year = 1970;
+                this.color = "WHITE";
+                Speed = 0;// Becomes value in the setter
+                numberOfCars++;
             }
 
             // Property = combine aspects of both fields and methods (share name with a field)
@@ -524,14 +587,21 @@ namespace Sample_Code
                 Console.WriteLine($"The {color}, {year}, {make} {model} is traveling at {speed} mph.");
                 Console.WriteLine();
             }
+            static public void PrintNumerofCars()
+            { 
+                // Note, to get the counting correct, this relise on a static field
+                Console.WriteLine($"Number of Cars: {Car.numberOfCars}");
+            }
         }
 
 
-        // Objects
-        //------------------------------------------------------------------------------------------------------------------------------------------------------
 
         // Static
         //------------------------------------------------------------------------------------------------------------------------------------------------------
+        // Can be applied to:
+        // Class -- in which case the class cannot be instantiated
+        // Field -- in which case belongs to class, not object
+        // Method -- in which case belongs to class, not object
 
         // Overloaded Constructors
         //------------------------------------------------------------------------------------------------------------------------------------------------------
