@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Net.Http.Headers;
@@ -254,6 +255,7 @@ namespace Sample_Code
             }
             Console.WriteLine();
 
+
             // Switch Statements
             //------------------------------------------------------------------------------------------------------------------------------------------------------
             string choice = "Pineapple";
@@ -273,6 +275,7 @@ namespace Sample_Code
                     break;
             }
             Console.WriteLine();
+
 
             // While Loops
             //------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -314,6 +317,30 @@ namespace Sample_Code
                 Console.WriteLine(car);
             }
             Console.WriteLine();
+
+
+            // List
+            //------------------------------------------------------------------------------------------------------------------------------------------------------
+            //    Data structure that represents a list of objects that can be accessed by index.
+            //    Similar to array, but can dynamically increase/decrease in size 
+            //    using System.Collections.Generic;
+            List<string> food = new List<string>();
+            food.Add("pizza");
+            food.Add("hamburger");
+            food.Add("hotdog");
+            food.Remove("hamburger");
+            food.Insert(0, "Carrot");
+            food.Insert(2, "Carrot");
+            Console.WriteLine(food.Count);
+            Console.WriteLine(food.IndexOf("Pizza"));
+            Console.WriteLine(food.LastIndexOf("Carrot"));
+            Console.WriteLine(food.Contains("pizza"));
+            food.Sort();
+            food.Reverse();
+            food.Clear();
+
+            string[] foodArray = food.ToArray();
+
 
             // Exception Handling
             //------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -383,7 +410,9 @@ namespace Sample_Code
             // This bit makes calls to code outside Main
             //------------------------------------------------------------------------------------------------------------------------------------------------------
             CallSomeStuffMethod();
-
+            Console.WriteLine(Planets.Pluto + " is a planet");
+            Console.WriteLine(Planets.Pluto.ToString() + " is a planet");
+            Console.WriteLine(Planets.Pluto + $" is the {(int)Planets.Pluto} planet");
 
             // Closing Out Console
             //------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -436,27 +465,6 @@ namespace Sample_Code
             double total = AddNumbers(2.3, 4.5, 3.7);
             Console.WriteLine($"Total is {total}");
             Console.WriteLine();
-
-            // Create a human object
-            Human human1 = new Human();
-            human1.Name = "Rick";
-            human1.age = 65;
-            human1.Eat();
-            human1.Sleep();
-
-            // Create some car objects
-            Console.WriteLine("The number of cars before creating any cars");
-            Car.PrintNumerofCars();
-            Car car1 = new Car("Ford", "F150", 2017, "Grey", 55);
-            car1.PrintVehicleDetails();
-            Car car2 = new Car("Ford", "F150", 2017, "Grey", 55);
-            car2.PrintVehicleDetails();
-            Car car3 = new Car(); // Uses overloaded constructor
-            car3.PrintVehicleDetails();
-            Console.WriteLine($"Number of Cars: {Car.numberOfCars}");
-            Console.WriteLine("The number of cars after creating some cars");
-            // Alternate (static method option)
-            Car.PrintNumerofCars();
         }
 
         static void SimpleMethod()
@@ -523,134 +531,55 @@ namespace Sample_Code
         }
 
 
-        // Classes and Objects
-        //------------------------------------------------------------------------------------------------------------------------------------------------------
-        class Human
-        {
-            // Very simple class (and not secure)
-            public string? Name; // not secure, but good for example
-            public int age; // not secure, but good for example
-
-            public void Eat()  // not secure, but good for example
-            {
-                Console.WriteLine(Name + " is eating");
-            }
-            public void Sleep()  // not secure, but good for example
-            {
-                Console.WriteLine(Name + " is sleeping");
-            }
-        }
-        class Car
-        {
-            // Fields - what an object has
-            string make;
-            string model;
-            int year;
-            string color;
-            private int speed; // This one will only be accessible by the getter / setter
-            public static int numberOfCars = 0; // Belongs to class not an instance
-
-            // Constructor
-            public Car(string make, string model, int year, string color, int userSpeed)
-            {
-                this.make = make;
-                this.model = model;
-                this.year = year;
-                this.color = color;
-                Speed = userSpeed; // Becomes value in the setter
-                numberOfCars++;
-            }
-            // Overlaoded Constructor
-            public Car() // Default Case
-            {
-                this.make = "ACME";
-                this.model = "SEDAN";
-                this.year = 1970;
-                this.color = "WHITE";
-                Speed = 0;// Becomes value in the setter
-                numberOfCars++;
-            }
-
-            // Property = combine aspects of both fields and methods (share name with a field)
-            public int Speed // Define property assciated with speed (same name, except uses a capital letter to start)
-            {
-                // getters & setters = add security to fields by encapsulation
-                //                    They're accessors found within properties
-                get { return speed; }
-                set { speed = value; } // value keyword = defines the value being assigned by the set (parameter)
-            }
-
-            // Methods - what an object can do
-            public void PrintVehicleDetails()
-            {
-                Console.WriteLine();
-                Console.WriteLine($"The {color}, {year}, {make} {model} is traveling at {speed} mph.");
-                Console.WriteLine();
-            }
-            static public void PrintNumerofCars()
-            { 
-                // Note, to get the counting correct, this relise on a static field
-                Console.WriteLine($"Number of Cars: {Car.numberOfCars}");
-            }
-        }
+    }
 
 
+    // Enum
+    //------------------------------------------------------------------------------------------------------------------------------------------------------
+    //    special "class" that contains a set of named integer constants.
+    //                                 name = integer
+    //    Use enums when you have values that you know will not change,
+    //    To get the integer value from an item, you must explicitly convert to an int
+    //
+    // Not sure why, but does not seem you can create within Main (?)
+    //
+    enum Planets
+    {
+        Mercury,
+        Venus,
+        Earth,
+        Mars,
+        Jupiter,
+        Saturn,
+        Uranus,
+        Neptune,
+        Pluto
+    }
 
-        // Static
-        //------------------------------------------------------------------------------------------------------------------------------------------------------
-        // Can be applied to:
-        // Class -- in which case the class cannot be instantiated
-        // Field -- in which case belongs to class, not object
-        // Method -- in which case belongs to class, not object
+    enum CustomNumberedPlanets
+    {
+        Mercury = 3,
+        Venus = 4,
+        Earth = 5,
+        Mars = 6,
+        Jupiter = 7,
+        Saturn = 8,
+        Uranus = 9,
+        Neptune = 10,
+        Pluto = 11
+    }
 
-        // Overloaded Constructors
-        //------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        // Inheritance
-        //------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        // Abstract Classes
-        //------------------------------------------------------------------------------------------------------------------------------------------------------
-        // The C# programming language provides support for both virtual and abstract methods, each of which has distinct advantages.
-        // You use virtual methods to implement late binding, whereas abstract methods enable you to force the subclasses of the type
-        // to have the method explicitly overridden. 
-
-        // Array of Objects
-        //------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        // Objects as Arguments
-        //------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        // Method OverRIDING
-        //------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        // ToString Method
-        //------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        // Polymorphism
-        //------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        // Interfaces
-        //------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        // Lists
-        //------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        // Lists of Objects
-        //------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        // Auto Implemented Properties
-        //------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        // Enums
-        //------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        // Generics
-        //------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        // Multi-Threading
-        //------------------------------------------------------------------------------------------------------------------------------------------------------
-
+    enum PlanetRadius
+    {
+        Mercury = 2439,
+        Venus = 6051,
+        Earth = 6371,
+        Mars = 3389,
+        Jupiter = 6911,
+        Saturn = 58232,
+        Uranus = 25362,
+        Neptune = 24622,
+        Pluto = 1188
     }
 
 }
